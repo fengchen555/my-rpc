@@ -1,4 +1,4 @@
-package com.example.myrpc.pojo.entity;
+package com.example.myrpc.commom.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

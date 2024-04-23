@@ -1,6 +1,6 @@
 package com.example.myrpc.server.service.impl;
 
-import com.example.myrpc.pojo.entity.User;
+import com.example.myrpc.commom.entity.User;
 import com.example.myrpc.server.service.UserService;
 
 import java.util.Random;
@@ -16,5 +16,15 @@ public class UserServiceImpl implements UserService {
                 .id(id)
                 .sex(random.nextBoolean()).build();
         return user;
+    }
+
+    /**
+     * @param user
+     * @return
+     */
+    @Override
+    public Integer insertUserId(User user) {
+        System.out.println("插入数据成功："+user);
+        return 1;
     }
 }
