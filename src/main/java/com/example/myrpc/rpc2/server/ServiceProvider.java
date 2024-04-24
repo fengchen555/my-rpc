@@ -20,9 +20,11 @@ public class ServiceProvider {
     }
 
     public void provideServiceInterface(Object service){
+        // 服务的名字
         String serviceName = service.getClass().getName();
+        // 服务实现类实现的接口
         Class<?>[] interfaces = service.getClass().getInterfaces();
-
+        // 服务的名字和服务实现类的映射
         for(Class clazz : interfaces){
             interfaceProvider.put(clazz.getName(),service);
         }
