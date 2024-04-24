@@ -1,4 +1,4 @@
-package com.example.myrpc.commom;
+package com.example.myrpc.rpc1.commom;
 
 import lombok.Builder;
 import lombok.Data;

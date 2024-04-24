@@ -1,4 +1,4 @@
-package com.example.myrpc.server.service.impl;
+package com.example.myrpc.rpc1.server.service.impl;
 
 import com.example.myrpc.commom.entity.User;
 import com.example.myrpc.server.service.UserService;

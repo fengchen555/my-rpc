@@ -1,5 +1,6 @@
-package com.example.myrpc.client;
+package com.example.myrpc.rpc1.client;
 
+import com.example.myrpc.client.ClientProxy;
 import com.example.myrpc.commom.entity.User;
 import com.example.myrpc.server.service.UserService;
 

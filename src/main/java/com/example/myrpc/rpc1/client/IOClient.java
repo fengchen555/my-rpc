@@ -1,4 +1,4 @@
-package com.example.myrpc.client;
+package com.example.myrpc.rpc1.client;
 
 import com.example.myrpc.commom.RPCRequest;
 import com.example.myrpc.commom.RPCResponse;
