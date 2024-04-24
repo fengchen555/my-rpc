@@ -1,7 +1,8 @@
 package com.example.myrpc.rpc1.server.service.impl;
 
-import com.example.myrpc.commom.entity.User;
-import com.example.myrpc.server.service.UserService;
+
+import com.example.myrpc.rpc1.commom.entity.User;
+import com.example.myrpc.rpc1.server.service.UserService;
 
 import java.util.Random;
 import java.util.UUID;

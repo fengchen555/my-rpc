@@ -1,8 +1,8 @@
 package com.example.myrpc.rpc1.client;
 
-import com.example.myrpc.client.IOClient;
-import com.example.myrpc.commom.RPCRequest;
-import com.example.myrpc.commom.RPCResponse;
+
+import com.example.myrpc.rpc1.commom.RPCRequest;
+import com.example.myrpc.rpc1.commom.RPCResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.cglib.proxy.InvocationHandler;
 import org.springframework.cglib.proxy.Proxy;

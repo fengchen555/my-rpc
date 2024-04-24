@@ -1,6 +1,6 @@
 package com.example.myrpc.rpc1.server.service;
 
-import com.example.myrpc.commom.entity.User;
+import com.example.myrpc.rpc1.commom.entity.User;
 
 public interface UserService {
     // 客户端通过这个接口调用服务端的实现类

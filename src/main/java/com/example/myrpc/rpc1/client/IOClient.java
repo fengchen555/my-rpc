@@ -1,7 +1,9 @@
 package com.example.myrpc.rpc1.client;
 
-import com.example.myrpc.commom.RPCRequest;
-import com.example.myrpc.commom.RPCResponse;
+
+
+import com.example.myrpc.rpc1.commom.RPCRequest;
+import com.example.myrpc.rpc1.commom.RPCResponse;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
