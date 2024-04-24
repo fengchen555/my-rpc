@@ -1,9 +1,9 @@
-package com.example.myrpc.rpc2.server;
+package com.example.myrpc.rpc3.server;
 
-import com.example.myrpc.rpc2.server.service.BlogService;
-import com.example.myrpc.rpc2.server.service.UserService;
-import com.example.myrpc.rpc2.server.service.impl.BlogServiceImpl;
-import com.example.myrpc.rpc2.server.service.impl.UserServiceImpl;
+import com.example.myrpc.rpc3.server.service.BlogService;
+import com.example.myrpc.rpc3.server.service.UserService;
+import com.example.myrpc.rpc3.server.service.impl.BlogServiceImpl;
+import com.example.myrpc.rpc3.server.service.impl.UserServiceImpl;
 
 public class TestServer {
     public static void main(String[] args) {
@@ -18,7 +18,7 @@ public class TestServer {
         serviceProvider.provideServiceInterface(userService);
         serviceProvider.provideServiceInterface(blogService);
 
-        RPCServer RPCServer = new SimpleRPCRPCServer(serviceProvider);
+        RPCServer RPCServer = new NettyRPCServer(serviceProvider);
         RPCServer.start(8899);
     }
 }

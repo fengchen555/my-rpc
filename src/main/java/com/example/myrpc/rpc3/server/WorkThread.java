@@ -1,7 +1,7 @@
-package com.example.myrpc.rpc2.server;
+package com.example.myrpc.rpc3.server;
 
-import com.example.myrpc.rpc2.commom.RPCRequest;
-import com.example.myrpc.rpc2.commom.RPCResponse;
+import com.example.myrpc.rpc3.commom.RPCRequest;
+import com.example.myrpc.rpc3.commom.RPCResponse;
 import lombok.AllArgsConstructor;
 
 import java.io.IOException;

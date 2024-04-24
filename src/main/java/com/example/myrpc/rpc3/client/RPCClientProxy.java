@@ -1,8 +1,7 @@
-package com.example.myrpc.rpc2.client;
+package com.example.myrpc.rpc3.client;
 
-
-import com.example.myrpc.rpc2.commom.RPCRequest;
-import com.example.myrpc.rpc2.commom.RPCResponse;
+import com.example.myrpc.rpc3.commom.RPCRequest;
+import com.example.myrpc.rpc3.commom.RPCResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.cglib.proxy.InvocationHandler;
 import org.springframework.cglib.proxy.Proxy;
@@ -10,11 +9,8 @@ import org.springframework.cglib.proxy.Proxy;
 import java.lang.reflect.Method;
 
 @AllArgsConstructor
-public class ClientProxy implements InvocationHandler {
-    // 传入参数Service接口的class对象，反射封装成一个request
-    // 传入host和port，用于建立socket连接
-    private String host;
-    private int port;
+public class RPCClientProxy implements InvocationHandler {
+    private RPCClient client;
 
 
     // jdk 动态代理， 每一次代理对象调用方法，会经过此方法增强（反射获取request对象，socket发送至客户端）
@@ -25,7 +21,7 @@ public class ClientProxy implements InvocationHandler {
                 .methodName(method.getName())
                 .params(args).paramsTypes(method.getParameterTypes()).build();
         // 数据传输
-        RPCResponse response = IOClient.sendRequest(host, port, request);
+        RPCResponse response = client.sendRequest(request); // 发送request
         //System.out.println(response);
         return response.getData();
     }
