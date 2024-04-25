@@ -16,6 +16,7 @@ public class RPCResponse implements Serializable {
     // 信息
     private String message;
     // 具体数据
+    private Class<?> dataType;
     private Object data;
     // 成功的响应
     public static RPCResponse success(Object data){

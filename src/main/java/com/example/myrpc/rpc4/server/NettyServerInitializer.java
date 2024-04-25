@@ -1,5 +1,8 @@
 package com.example.myrpc.rpc4.server;
 
+import com.example.myrpc.rpc4.codec.MyDecode;
+import com.example.myrpc.rpc4.codec.MyEncode;
+import com.example.myrpc.rpc4.codec.ObjectSerializer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -25,13 +28,15 @@ public class NettyServerInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new LengthFieldPrepender(4));
 
         // 这里使用的还是java 序列化方式， netty的自带的解码编码支持传输这种结构
-        pipeline.addLast(new ObjectEncoder());
-        pipeline.addLast(new ObjectDecoder(new ClassResolver() {
-            @Override
-            public Class<?> resolve(String className) throws ClassNotFoundException {
-                return Class.forName(className);
-            }
-        }));
+//        pipeline.addLast(new ObjectEncoder());
+//        pipeline.addLast(new ObjectDecoder(new ClassResolver() {
+//            @Override
+//            public Class<?> resolve(String className) throws ClassNotFoundException {
+//                return Class.forName(className);
+//            }
+//        }));
+        pipeline.addLast(new MyEncode(new ObjectSerializer()));
+        pipeline.addLast(new MyDecode());
 
         pipeline.addLast(new NettyRPCServerHandler(serviceProvider));
     }
