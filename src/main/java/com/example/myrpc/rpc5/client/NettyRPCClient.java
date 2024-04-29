@@ -2,6 +2,8 @@ package com.example.myrpc.rpc5.client;
 
 import com.example.myrpc.rpc5.commom.RPCRequest;
 import com.example.myrpc.rpc5.commom.RPCResponse;
+import com.example.myrpc.rpc5.register.NacosServiceRegister;
+import com.example.myrpc.rpc5.register.ServiceRegister;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -10,17 +12,20 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
 
+import java.net.InetSocketAddress;
+
 /**
  * 实现RPCClient接口
  */
 public class NettyRPCClient implements RPCClient {
     private static final Bootstrap bootstrap;
     private static final EventLoopGroup eventLoopGroup;
+    private ServiceRegister serviceRegister;
     private String host;
     private int port;
-    public NettyRPCClient(String host, int port) {
-        this.host = host;
-        this.port = port;
+    public NettyRPCClient() {
+        // 初始化注册中心，建立连接
+        this.serviceRegister = new NacosServiceRegister();
     }
     // netty客户端初始化，重复使用
     static {
@@ -36,6 +41,10 @@ public class NettyRPCClient implements RPCClient {
     @Override
     public RPCResponse sendRequest(RPCRequest request) {
         try {
+            // 从注册中心获取host，port
+            InetSocketAddress address = serviceRegister.serviceDiscovery(request.getInterfaceName());
+            host = address.getHostName();
+            port = address.getPort();
             // 连接服务端
             ChannelFuture channelFuture  = bootstrap.connect(host, port).sync();
             Channel channel = channelFuture.channel();

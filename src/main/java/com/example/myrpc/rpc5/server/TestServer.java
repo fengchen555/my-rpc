@@ -13,8 +13,8 @@ public class TestServer {
 //        // 暴露两个服务接口， 即在RPCServer中加一个HashMap
 //        serviceProvide.put(UserService.class.getName(),userService);
 //        serviceProvide.put(BlogService.class.getName(),blogService);
-
-        ServiceProvider serviceProvider = new ServiceProvider();
+// 这里重用了服务暴露类，顺便在注册中心注册，实际上应分开，每个类做各自独立的事
+        ServiceProvider serviceProvider = new ServiceProvider("127.0.0.1", 8899);
         serviceProvider.provideServiceInterface(userService);
         serviceProvider.provideServiceInterface(blogService);
 

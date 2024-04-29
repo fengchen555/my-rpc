@@ -8,7 +8,7 @@ import com.example.myrpc.rpc5.server.service.UserService;
 public class TestClient {
     public static void main(String[] args) {
         // 构建一个使用java Socket/ netty/....传输的客户端
-        RPCClient rpcClient = new NettyRPCClient("127.0.0.1", 8899);
+        RPCClient rpcClient = new NettyRPCClient();
         System.out.println("Netty客户端启动了....");
         // 把这个客户端传入代理客户端
         RPCClientProxy rpcClientProxy = new RPCClientProxy(rpcClient);
