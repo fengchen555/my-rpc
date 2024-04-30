@@ -5,45 +5,64 @@ import com.example.myrpc.rpc6.register.ServiceRegister;
 
 import java.net.InetSocketAddress;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
-/**
- * 之前这里使用Map简单实现的
- * 存放服务接口名与服务端对应的实现类
- * 服务启动时要暴露其相关的实现类0
- * 根据request中的interface调用服务端中相关实现类
- */
 public class ServiceProvider {
-    /**
-     * 一个实现类可能实现多个接口
-     */
+    // 服务提供者接口名与服务对象的映射
     private Map<String, Object> interfaceProvider;
     private String host;
     private int port;
     private ServiceRegister serviceRegister;
 
-    public ServiceProvider(String host, int port){
-        // 需要传入服务端自身的服务的网络地址
+    public ServiceProvider(String host, int port) {
         this.host = host;
         this.port = port;
         this.interfaceProvider = new HashMap<>();
         this.serviceRegister = new NacosServiceRegister();
+        // 注册关闭钩子
+        registerShutdownHook();
     }
 
-
-    public void provideServiceInterface(Object service){
+    public void provideServiceInterface(Object service) {
         Class<?>[] interfaces = service.getClass().getInterfaces();
 
-        for(Class clazz : interfaces){
-            // 本机的映射表
-            interfaceProvider.put(clazz.getName(),service);
-            // 在注册中心注册服务
-            serviceRegister.register(clazz.getName(),new InetSocketAddress(host,port));
+        for (Class clazz : interfaces) {
+            String serviceName = clazz.getName();
+            // 保存服务名和服务实现类的映射
+            interfaceProvider.put(serviceName, service);
+            serviceRegister.register(serviceName, new InetSocketAddress(host, port));
         }
-
     }
 
-    public Object getService(String interfaceName){
+    // 关闭特定服务的方法
+    private void deregister(String serviceName) {
+        interfaceProvider.remove(serviceName);
+        serviceRegister.deregister(serviceName, new InetSocketAddress(host, port));
+    }
+
+    // 注册关闭钩子
+    private void registerShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            // 在钩子中调用关闭方法
+            closeAllServices();
+            // 关闭Nacos连接
+            serviceRegister.close();
+        }));
+    }
+
+    // 关闭所有服务的方法，用于钩子调用
+    public void closeAllServices() {
+        Iterator<String> iterator = interfaceProvider.keySet().iterator();
+        while (iterator.hasNext()) {
+            String serviceName = iterator.next();
+            iterator.remove(); // 使用迭代器的remove方法删除元素
+            deregister(serviceName);
+        }
+    }
+
+
+    public Object getService(String interfaceName) {
         return interfaceProvider.get(interfaceName);
     }
 }
