@@ -1,13 +1,19 @@
-package com.example.myrpc.rpc6.server;
+package com.example.myrpc.rpc7.server;
 
-import com.example.myrpc.rpc6.register.NacosServiceRegister;
-import com.example.myrpc.rpc6.register.ServiceRegister;
+import com.example.myrpc.rpc7.register.NacosServiceRegister;
+import com.example.myrpc.rpc7.register.Service;
+import com.example.myrpc.rpc7.register.ServiceRegister;
+import com.example.myrpc.rpc7.register.ServiceScan;
+import lombok.extern.slf4j.Slf4j;
+import org.reflections.Reflections;
 
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
+@Slf4j
 public class ServiceProvider {
     // 服务提供者接口名与服务对象的映射
     private Map<String, Object> interfaceProvider;
@@ -15,25 +21,38 @@ public class ServiceProvider {
     private int port;
     private ServiceRegister serviceRegister;
 
-    public ServiceProvider(String host, int port) {
+    public ServiceProvider(String host, int port, Class<?> startupClass) {
         this.host = host;
         this.port = port;
         this.interfaceProvider = new HashMap<>();
         this.serviceRegister = new NacosServiceRegister();
         // 注册关闭钩子
         registerShutdownHook();
-    }
-
-    public void provideServiceInterface(Object service) {
-        Class<?>[] interfaces = service.getClass().getInterfaces();
-
-        for (Class clazz : interfaces) {
-            String serviceName = clazz.getName();
-            // 保存服务名和服务实现类的映射
-            interfaceProvider.put(serviceName, service);
-            serviceRegister.register(serviceName, new InetSocketAddress(host, port));
+//        System.out.println(123);
+//        System.out.println("扫描服务类"+startupClass.getName());
+        if (startupClass.isAnnotationPresent(ServiceScan.class)) {
+//            System.out.println("scan");
+            ServiceScan serviceScan = startupClass.getAnnotation(ServiceScan.class);
+            scanServices(serviceScan.value());
         }
     }
+    //扫描注册服务
+    private void scanServices(String basePackage) {
+        Reflections reflections = new Reflections(basePackage);
+        Set<Class<?>> classes = reflections.getTypesAnnotatedWith(Service.class);
+        //System.out.println(classes);
+        for (Class<?> clazz : classes) {
+            try {
+                Object serviceInstance = clazz.getDeclaredConstructor().newInstance();
+                serviceRegister.register(clazz.getInterfaces()[0].getName(), new InetSocketAddress(host, port));
+                interfaceProvider.put(clazz.getInterfaces()[0].getName(), serviceInstance);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 
     // 关闭特定服务的方法
     private void deregister(String serviceName) {
