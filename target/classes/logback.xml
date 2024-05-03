@@ -1,0 +1,9 @@
+<configuration>
+    <!-- 现有的Logback配置 -->
+
+    <!-- 定义记录器 -->
+    <logger name="com.alibaba.nacos.client" level="ERROR" />
+
+    <!-- 根据需要定义附加器和其他配置 -->
+
+</configuration>
